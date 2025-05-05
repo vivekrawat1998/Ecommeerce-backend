@@ -1,0 +1,1 @@
+import recentlyViewedProductModel from "../models/recentlyViewedProductModel.js";
