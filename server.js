@@ -23,6 +23,7 @@ const bannerRouter = require("./routes/bannerRoute");
 const searchRouter = require("./routes/searchRoute");
 const uploadRouter = require("./routes/uploadRoute");
 const authJwt = require("./helper/authJwt");
+const wishRouter = require("./routes/whishlistRoute")
 const { notFound, errorHandler } = require("./helper/errroHandler");
 
 connectDB();
@@ -54,6 +55,7 @@ app.use("/api/v1/productReviews", prodReviewRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/homeBanner", bannerRouter);
 app.use("/api/v1/search", searchRouter);
+app.use("/api/v1/wish", wishRouter);
 app.use("/api/v1/upload", uploadRouter);
 
 app.use(notFound)

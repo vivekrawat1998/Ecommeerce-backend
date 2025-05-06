@@ -4,17 +4,18 @@ const express = require('express');
 
 const router = express.Router();
 
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/user/:userId', authMiddleware, async (req, res) => {
     try {
+        const { userId } = req.params;
+        const cartList = await cartModel.find({ userId });
 
-        const cartList = await cartModel.find(req.query);
-
-        if (!cartList) {
-            return res.status(404).json({ success: false, message: "Cart Item Not Found" });
+        if (!cartList || cartList.length === 0) {
+            return res.status(404).json({ success: false, message: "No Cart Items Found for this User" });
         }
 
-        return res.status(200).json(cartList);
+        return res.status(200).json({ success: true, cartList });
     } catch (error) {
+        console.error("Error fetching cart for user:", error);
         return res.status(500).json({ success: false, message: "Server Error" });
     }
 });
@@ -122,10 +123,6 @@ router.delete('/:id', async (req, res) => {
 
 router.post('/decreaseQuantity', authMiddleware, async (req, res) => {
     const { userId, cartItemId } = req.body;
-
-
-
-
     try {
         // Correct: Use findOne to match both _id and userId
         const cartItem = await cartModel.findOne({ _id: cartItemId, userId });
