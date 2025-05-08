@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const colors = require("colors");
 const connectDB = require("./config/db");
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 const PORT = process.env.PORT || 9878;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -22,15 +22,15 @@ const orderRouter = require("./routes/orderRoute");
 const bannerRouter = require("./routes/bannerRoute");
 const searchRouter = require("./routes/searchRoute");
 const uploadRouter = require("./routes/uploadRoute");
-const authJwt = require("./helper/authJwt");
-const wishRouter = require("./routes/whishlistRoute")
 const { notFound, errorHandler } = require("./helper/errroHandler");
+
 
 connectDB();
 
+
 app.use(cors({
-  origin: 'http://localhost:5173', // only allow your frontend origin
-  credentials: true,               // allow cookies to be sent
+  origin: 'http://localhost:5174',
+  credentials: true,
 }));
 app.options("*", cors);
 app.use(morgan("dev"));
@@ -38,9 +38,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// app.use(authJwt());
 
-// routes
 app.use("/uploads", express.static("uploads"));
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/category", categoryRouter);
@@ -50,17 +48,18 @@ app.use("/api/v1/productRam", productRAMSRouter);
 app.use("/api/v1/productSize", productSIZERouter);
 app.use("/api/v1/productColor", productColorRouter);
 app.use("/api/v1/cart", cartRouter);
-app.use("/api/v1/my-list", whishlistRouter);
+app.use("/api/v1/wish", whishlistRouter);
 app.use("/api/v1/productReviews", prodReviewRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/homeBanner", bannerRouter);
 app.use("/api/v1/search", searchRouter);
-app.use("/api/v1/wish", wishRouter);
 app.use("/api/v1/upload", uploadRouter);
 
-app.use(notFound)
-app.use(errorHandler)
+// Error handling middleware
+app.use(notFound);
+app.use(errorHandler);
 
+// Start server
 app.listen(PORT, () => {
   console.log(
     `Server Running in ${process.env.NODE_MODE} Mode on port ${PORT}`.bgCyan

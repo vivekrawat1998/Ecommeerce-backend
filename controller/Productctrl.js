@@ -5,11 +5,11 @@ const mongoose = require('mongoose');
 
 const getAllProducts = async (req, res) => {
     try {
-        const { 
-            page = 1, 
-            perPage = 10, 
-            minPrice, 
-            maxPrice, 
+        const {
+            page = 1,
+            perPage = 10,
+            minPrice,
+            maxPrice,
             q: searchQuery,
             category,
             sortBy = 'dateCreated',
@@ -18,7 +18,6 @@ const getAllProducts = async (req, res) => {
 
         const query = {};
         const sort = {};
-
         // Search functionality
         if (searchQuery) {
             query.$text = { $search: searchQuery };
@@ -56,9 +55,9 @@ const getAllProducts = async (req, res) => {
             currentPage: parseInt(page)
         });
     } catch (error) {
-        res.status(500).json({ 
-            success: false, 
-            message: error.message 
+        res.status(500).json({
+            success: false,
+            message: error.message
         });
     }
 };
@@ -82,7 +81,7 @@ const getProductById = async (req, res) => {
     try {
         const product = await productModel.findById(req.params.id)
             .populate('category');
-            
+
         if (!product) {
             return res.status(404).json({
                 success: false,
@@ -155,7 +154,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const product = await productModel.findByIdAndDelete(req.params.id);
-        
+
         if (!product) {
             return res.status(404).json({
                 success: false,
@@ -195,15 +194,15 @@ const searchProducts = async (req, res) => {
         const searchQuery = req.query.q || '';
         const page = parseInt(req.query.page) || 1;
         const perPage = parseInt(req.query.perPage) || 10;
-        
+
         const products = await productModel.find(
             { $text: { $search: searchQuery } },
             { score: { $meta: "textScore" } }
         )
-        .sort({ score: { $meta: "textScore" } })
-        .populate('category')
-        .skip((page - 1) * perPage)
-        .limit(perPage);
+            .sort({ score: { $meta: "textScore" } })
+            .populate('category')
+            .skip((page - 1) * perPage)
+            .limit(perPage);
 
         const totalResults = await productModel.countDocuments(
             { $text: { $search: searchQuery } }
@@ -217,9 +216,9 @@ const searchProducts = async (req, res) => {
             currentPage: page
         });
     } catch (error) {
-        res.status(500).json({ 
-            success: false, 
-            message: error.message 
+        res.status(500).json({
+            success: false,
+            message: error.message
         });
     }
 };
@@ -228,7 +227,7 @@ const getRecentlyViewedProducts = async (req, res) => {
     try {
         const products = await recentlyViewedProductModel.find(req.query)
             .populate('category');
-            
+
         res.status(200).json({
             success: true,
             products
@@ -243,8 +242,8 @@ const getRecentlyViewedProducts = async (req, res) => {
 
 const createRecentlyViewedProduct = async (req, res) => {
     try {
-        let existingProduct = await recentlyViewedProductModel.findOne({ 
-            prodId: req.body.prodId 
+        let existingProduct = await recentlyViewedProductModel.findOne({
+            prodId: req.body.prodId
         });
 
         if (!existingProduct) {

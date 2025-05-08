@@ -7,6 +7,37 @@ const { generateAccessToken, generateRefreshToken } = require("../utils/generate
 
 const router = express.Router();
 
+
+// router.post('/auth0-login', async (req, res) => {
+//   const { code } = req.body;
+
+//   if (!code) {
+//       return res.status(400).json({ error: 'Authorization code is required' });
+//   }
+
+//   try {
+//       const response = await axios.post('https://dev-33mmk06chjo16nsv.us.auth0.com/oauth/token', qs.stringify({
+//           grant_type: 'authorization_code',
+//           client_id: 'bcGPldhd9ibAd3UG7oCDJctMeDFKDq2W', 
+//           client_secret: '6pxUX34jfhjWloYpUR2s0vLaoF1ROjMDsHw4Q51ZPh1Z7K7soVvyZqFqjMHKYj9C',
+//           code,
+//           redirect_uri: 'http://localhost:5173', 
+//       }), {
+//           headers: {
+//               'Content-Type': 'application/x-www-form-urlencoded',
+//           },
+//       });
+
+//       const { access_token } = response.data;
+
+//       res.json({ token: access_token });
+//   } catch (error) {
+//       console.error('Error exchanging code for token:', error);
+//       res.status(500).json({ error: 'Error exchanging authorization code for token' });
+//   }
+// });
+
+
 router.post("/signup", async (req, res) => {
   const { name, phone, email, password, isAdmin } = req.body;
   try {
